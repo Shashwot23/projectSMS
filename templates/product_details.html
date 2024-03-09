@@ -1,0 +1,51 @@
+{% include "header.html" %}
+
+
+<div class="product_container">
+    <img class="product-image" src="{{product_details.product_image.url}}" alt="{{product_details.product_name}}">
+    <div class="detail_container">
+        <h1 class="product-name">{{product_details.product_name}}</h1>
+        <p class="product-price">Price: Rs.{{product_details.product_price}}</p>
+        <p class="product-description">{{product_details.product_description | safe}}</p>
+        {% if request.user.is_authenticated %}
+        <button class="add-to-cart">Add to Cart</button>
+        {% else %}
+        <button class="add-to-cart" id="redirectButton">Login</button>
+        {% endif %}
+    </div>
+</div>
+<h1 class='product-name'>Other Products</h1>
+<div class="card_container">
+    <ul>
+      {% for product in related_products %}
+        <li>
+          <a href="/product_details/{{product.product_slug}}">
+              <img src="{{product.product_image.url}}" alt="{{product.product_name}}" >
+            </a>
+            <h3>{{product.product_name}}</h3>
+            <p><b>Rs.{{product.product_price}} </b></p>
+            <p>
+              {% if request.user.is_authenticated %}
+              <button>Add to Cart</button>
+
+              {% endif %}
+            </p>
+        </li>
+      {% endfor %}
+        </ul>
+  </div>
+
+  <script>
+    function changeText(element) {
+      element.innerText = "Login";
+      }
+
+    function resetText(element) {
+      element.innerText = "Add to Cart";
+      }
+
+    document.getElementById("redirectButton").onclick = function () {
+      window.location.href = "{% url 'login' %}";
+      }
+</script>
+{% include "footer.html" %}

@@ -1,0 +1,28 @@
+{% include "header.html" %}
+
+<body>
+  <div class="card_container">
+    <ul>
+      {% for product in product_data %}
+        <li>
+          <a href="/product_details/{{product.product_slug}}">
+              <img src="{{product.product_image.url}}" alt="{{product.product_name}}" >
+            </a>
+            <h3>{{product.product_name}}</h3>
+            <p><b>Rs.{{product.product_price}} </b></p>
+            {% if request.user.is_authenticated %}
+            <form action='' method='POST'>
+              {% csrf_token %}
+              <input hidden type='text' name='product' value='{{product.id}}'>
+              <button type='submit'>Add to Cart</button>
+            </form>
+            {% endif %}
+        </li>
+        {% empty %}
+        No product found
+      {% endfor %}
+        </ul>
+  </div>
+{% include "footer.html" %}
+</body>
+</html>

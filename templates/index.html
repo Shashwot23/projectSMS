@@ -1,0 +1,108 @@
+{% include "header.html" %}
+    <!-- Slide show starts here-->
+    <div class="slideshow-container">
+        <!-- First Slide -->
+        <div class="mySlides fade">
+          <a href="/product_details/65-inch-uhd-led-tv">
+            <img src="/static/img/adv4.jpg" alt="Nature">
+          </a>
+        </div>
+    
+        <!-- Second Slide -->
+        <div class="mySlides fade">
+          <a href="/product_details/lg-washing-machine">
+            <img src="/static/img/adv5.jpg" alt="Snow">
+          </a>
+        </div>
+    
+        <!-- Third Slide -->
+        <div class="mySlides fade">
+          <a href="/product_details/samsung-galaxy-tab-a9">
+            <img src="/static/img/adv6.jpg" alt="Mountains">
+          </a>
+        </div>
+    
+        <!-- Dots Container -->
+        <div class="dot-container">
+          <span class="dot"></span> 
+          <span class="dot"></span> 
+          <span class="dot"></span>
+        </div>
+      </div>
+      <!-- Slide show ends here-->
+
+      <!--Product cards-->
+      <div class="card_container">
+        <h1><b>Available Products</b></h1>
+        <ul>
+          {% for product in product_data %}
+            <li>
+              <a href="/product_details/{{product.product_slug}}">
+                  <img src="{{product.product_image.url}}" alt="{{product.product_name}}" >
+                </a>
+                <h3>{{product.product_name}}</h3>
+                <p><b>Rs.{{product.product_price}} </b></p>
+              {% if request.user.is_authenticated %}
+              <form action='' method='POST'>
+              {% csrf_token %}
+              <input hidden type='text' name='product' value='{{product.id}}'>
+              <button type='submit'>Add to Cart</button>
+            </form>
+            {% endif %}
+            </li>
+          {% endfor %}
+            </ul>
+          <p class="view_more"><a href="{% url "product" %}">View more >></a></p>
+      </div>
+      <!-- Footer below this -->
+      {% include "footer.html" %}
+
+      <script>
+        // JS for slider
+        let slideIndex = 0;
+        showSlides();
+    
+        function showSlides() {
+          let i;
+          let slides = document.getElementsByClassName("mySlides");
+          let dots = document.getElementsByClassName("dot");
+          
+          for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";  
+          }
+          
+          slideIndex++;
+          
+          if (slideIndex > slides.length) {
+            slideIndex = 1;
+          }    
+          
+          for (i = 0; i < dots.length; i++) {
+            dots[i].className = dots[i].className.replace(" active", "");
+          }
+          
+          slides[slideIndex - 1].style.display = "block";  
+          dots[slideIndex - 1].className += " active";
+          
+          setTimeout(showSlides, 2000); // Change image every 2 seconds
+        }
+
+        // JS to change add to cart to signup
+    function changeText(element) {
+      // Change the text to "Sign Up" when the button is hovered
+      element.innerText = "Login";
+      }
+
+    function resetText(element) {
+      // Reset the text to "Add to Cart" when the mouse leaves the button
+      element.innerText = "Add to Cart";
+      }
+
+      document.getElementById("loginbutton").onclick = function () {
+        window.location.href = "{% url 'login' %}";
+    }
+      </script>
+
+
+</body>
+</html>

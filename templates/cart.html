@@ -1,0 +1,38 @@
+{% include "header.html" %}
+
+<!-- cart.html -->
+<h1>Cart</h1>
+<ul>
+    {% for item in cart_items %}
+    <li>
+        <div id='cart'>
+
+        <img src="{{item.product.product_image.url}}" alt="{{product.product_name}}" width="250" height="250">   
+        <div id='cart_details'>
+          <strong>{{ item.product.product_name }}</strong> <br>
+          <table id='cart_table'>
+            <tr>
+              <td>Price:</td>
+              <td>Rs.{{ item.product.product_price }}</td>
+            </tr>
+            <tr>
+                <td>Quantity:</td>
+              <td>{{ item.quantity }}</td>
+            </tr>
+          </table>
+
+              <form method="post" action="{% url 'update_cart' %}">
+                {% csrf_token %}
+                <input type="hidden" name="product_id" value="{{ item.product.id }}">
+                <button type="submit" name="action" value="increase">Increase</button>
+                <button type="submit" name="action" value="decrease">Decrease</button>
+              </form>
+        <div>
+        </div>
+      </li>
+  {% endfor %}
+</ul>
+<p id='total_amount'>Total: Rs.{{ total_price }}</p>
+
+
+{% include "footer.html" %}
