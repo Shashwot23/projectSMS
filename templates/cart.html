@@ -33,6 +33,12 @@
   {% endfor %}
 </ul>
 <p id='total_amount'>Total: Rs.{{ total_price }}</p>
+<div id="order_button">
+  <form method="POST">
+    {% csrf_token %}
+    <button type="submit">Place Order</button>
+  </form>
+</div>
 
 
 {% include "footer.html" %}

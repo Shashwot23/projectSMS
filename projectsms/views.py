@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
 from product.models import Product
+from orders.models import Order
 from accounts.forms import SignupForm
 from django.contrib.auth import logout as auth_logout
 from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
 import random
 
 def landingPage(request):
@@ -23,7 +25,7 @@ def landingPage(request):
         request.session['cart'] = cart
 
     data={
-        'product_data':product_data
+        'product_data':product_data,
     }
     return render(request, 'index.html', data)
 
@@ -72,7 +74,7 @@ def product(request):
     }
     return render(request, 'product.html',data)
 
-
+@login_required
 def cart(request):
     cart = request.session.get('cart', {})
     cart_items = []
@@ -81,6 +83,20 @@ def cart(request):
         product = Product.objects.get(id=product_id)
         total_price += product.product_price * quantity
         cart_items.append({'product': product, 'quantity': quantity})
+
+    if request.method == 'POST':
+        for product_id, quantity in cart.items():
+            product = Product.objects.get(id=product_id)
+            order = Order.objects.create(
+                product = product,
+                quantity = quantity,
+                customer = request.user,
+            )
+            order.save()
+
+        request.session['cart']={}
+
+        return render(request, 'index.html')
     
     data = {
         'cart_items': cart_items,

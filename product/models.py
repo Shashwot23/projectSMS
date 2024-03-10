@@ -8,4 +8,3 @@ class Product(models.Model):
     product_price = models.PositiveIntegerField()
     product_stock = models.PositiveIntegerField()
     product_slug = AutoSlugField(populate_from='product_name', unique=True, null=True, default=None)
-
